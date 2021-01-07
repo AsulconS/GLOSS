@@ -1,4 +1,5 @@
 .data
+.global button_state
 button_state: .word 0x0
 
 .text
