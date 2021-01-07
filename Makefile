@@ -39,8 +39,8 @@ _startup.o: src/_startup.s
 $(TARGET).o: src/$(TARGET).s
 	$(AS) $(OBJ_ARGS) -o $(TARGET).o src/$(TARGET).s
 
-arrsum.o: old/arrsum.s
-	$(AS) $(OBJ_ARGS) -o arrsum.o old/arrsum.s
+arrsum.o: src/arrsum.s
+	$(AS) $(OBJ_ARGS) -o arrsum.o src/arrsum.s
 
 folder:
 	@mkdir -p build/bin build/elf
