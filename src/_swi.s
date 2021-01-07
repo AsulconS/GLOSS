@@ -16,7 +16,7 @@ _swi:
 
     @ Switch r0 to choose a syscall address in r1
     ldr r1, jump_table_addr
-    ldr r1, [r1, +r0, LSL #2]
+    ldr r1, [r1, +r0, LSL #0x2]
 
     @ Branch to choosen syscall
     mov pc, r1
