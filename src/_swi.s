@@ -1,3 +1,6 @@
+.data
+button_state: .word 0x0
+
 .text
 .global _swi
 _swi:
@@ -31,7 +34,11 @@ _swi:
         b after
 
     io_syscall:
-        b after
+        ldr r0, button_dma_addr
+        ldr r1, button_state_addr
+        ldr r0, [r0]
+        str r0, [r1]
+        b   after
 
     cse_syscall:
         b after
@@ -58,4 +65,6 @@ jump_table:
     .word segfault_syscall
     .word ge_syscall
 
-jump_table_addr: .word jump_table
+jump_table_addr:   .word jump_table
+button_dma_addr:   .word 0xff200050
+button_state_addr: .word button_state

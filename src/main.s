@@ -15,6 +15,7 @@ main:
     ldr r1, res_addr
     str r0, [r1]
     svc #0x3
+    b   main
 
 end:
     b end
