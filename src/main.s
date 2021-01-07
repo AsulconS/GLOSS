@@ -14,7 +14,7 @@ main:
     bl  arrsum
     ldr r1, res_addr
     str r0, [r1]
-    svc #0x8
+    svc #0x3
 
 end:
     b end
