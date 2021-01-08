@@ -15,7 +15,8 @@ main:
     ldr r1, res_addr
     str r0, [r1]
     svc #0x3
-    ldr r2, button_state_addr
+    ldr r0, button_state_addr
+    ldr r4, [r0]
     b   main
 
 end:
