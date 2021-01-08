@@ -25,15 +25,19 @@ _swi:
     @ Branch to choosen syscall
     mov pc, r1
 
+    @ 0x0 syscall
     kill_syscall:
         b after
 
+    @ 0x1 syscall
     safekill_syscall:
         b after
 
+    @ 0x2 syscall
     restart_syscall:
         b after
 
+    @ 0x3 syscall
     io_syscall:
         ldr r0, button_dma_addr
         ldr r1, button_state_addr
@@ -41,12 +45,15 @@ _swi:
         str r0, [r1]
         b   after
 
+    @ 0x4 syscall
     cse_syscall:
         b after
 
+    @ 0x5 syscall
     segfault_syscall:
         b after
 
+    @ 0x6 syscall
     ge_syscall:
         b after
 
