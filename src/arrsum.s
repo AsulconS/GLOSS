@@ -25,4 +25,4 @@ arrsum:
         bne  loop
     mov r0, r3
     pop {r2, r3}
-    bx lr
+    bx  lr

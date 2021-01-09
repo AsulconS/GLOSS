@@ -3,6 +3,10 @@ arr: .byte 4, 8, 16
 eoa: .align
 res: .word 0x0
 
+hello_world: .asciz "Hello, World!\n"
+.align
+hello_world_size: .word .-hello_world
+
 .text
 .global _start
 _start:
@@ -14,10 +18,13 @@ main:
     bl  arrsum
     ldr r1, res_addr
     str r0, [r1]
-    svc #0x3
-    ldr r0, button_state_addr
-    ldr r4, [r0]
-    b   main
+
+    ldr r0, hello_world_addr
+    ldr r1, hello_world_size_addr
+    ldr r1, [r1]
+    mov r7, #0x0 @ write  syscall
+    svc #0x7     @ invoke syscall
+    @b   main
 
 end:
     b end
@@ -26,4 +33,6 @@ end:
 arr_addr: .word arr
 eoa_addr: .word eoa
 res_addr: .word res
-button_state_addr: .word button_state
+
+hello_world_addr:      .word hello_world
+hello_world_size_addr: .word hello_world_size

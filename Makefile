@@ -13,8 +13,9 @@ START_SYMBOL_ARG=-e _entry -u _entry
 TARGET=main
 
 EXCEPTION_OBJS=_startup.o _undef.o _swi.o
+SYSCALL_OBJS=write.o
 
-OBJS=_exception.o $(EXCEPTION_OBJS) $(TARGET).o arrsum.o
+OBJS=_exception.o $(EXCEPTION_OBJS) $(SYSCALL_OBJS) $(TARGET).o arrsum.o
 
 all: clean build objcopy trash
 
@@ -35,6 +36,9 @@ _swi.o: src/_swi.s
 
 _startup.o: src/_startup.s
 	$(AS) $(OBJ_ARGS) -o _startup.o src/_startup.s
+
+write.o: src/sys/write.s
+	$(AS) $(OBJ_ARGS) -o write.o src/sys/write.s
 
 $(TARGET).o: src/$(TARGET).s
 	$(AS) $(OBJ_ARGS) -o $(TARGET).o src/$(TARGET).s

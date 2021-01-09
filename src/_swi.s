@@ -1,31 +1,28 @@
-.data
-.global button_state
-button_state: .word 0x0
-
 .text
 .global _swi
 _swi:
     @ Used registers:
-    @ -> r0, r1
+    @ -> r4, r5
     @ Read Only registers:
+    @ -> r0-r3 (syscall args)
     @ -> r7 (syscall register)
     @ Store used registers and lr onto the stack
-    push {r0, r1, lr}
+    push {r4, r5, lr}
 
-    @ r0 will load the interrupt number
-    ldr r0, [lr, #-0x4]
-    bic r0, r0, #0xff000000
+    @ r4 will load the interrupt number
+    ldr r4, [lr, #-0x4]
+    bic r4, r4, #0xff000000
 
     @ Ensure valid interrupt number (>=0x0 && <0x8)
-    cmp r0, #0x8
+    cmp r4, #0x8
     bge undef_interrupt
 
     @ Switch r0 to choose a interrupt address in r1
-    ldr r1, jump_table_addr
-    ldr r1, [r1, +r0, LSL #0x2]
+    ldr r5, interrupt_jmp_table_addr
+    ldr r5, [r5, +r4, LSL #0x2]
 
     @ Branch to choosen interrupt
-    mov pc, r1
+    mov pc, r5
 
     @ 0x0 interrupt
     kill_interrupt:
@@ -41,11 +38,7 @@ _swi:
 
     @ 0x3 interrupt
     io_interrupt:
-        ldr r0, button_dma_addr
-        ldr r1, button_state_addr
-        ldr r0, [r0]
-        str r0, [r1]
-        b   after
+        b after
 
     @ 0x4 interrupt
     cse_interrupt:
@@ -61,17 +54,20 @@ _swi:
 
     @ 0x7 interrupt
     syscall_interrupt:
-        b after
+        ldr r5, syscall_jmp_table_addr
+        ldr r5, [r5, +r7, LSL #0x2]
+        blx r5  @ Passing r0-r3 args
+        b   after
 
     @ Default interrupt (undefined)
     undef_interrupt:
         b after
 
 after:
-    ldm sp!, {r0, r1, pc}^
+    ldm sp!, {r4, r5, pc}^
 
 @ Literal Pool
-jump_table:
+interrupt_jmp_table:
     .word kill_interrupt
     .word safekill_interrupt
     .word restart_interrupt
@@ -81,6 +77,8 @@ jump_table:
     .word ge_interrupt
     .word syscall_interrupt
 
-jump_table_addr:   .word jump_table
-button_dma_addr:   .word 0xff200050
-button_state_addr: .word button_state
+syscall_jmp_table:
+    .word _write_syscall
+
+interrupt_jmp_table_addr: .word interrupt_jmp_table
+syscall_jmp_table_addr:   .word syscall_jmp_table
