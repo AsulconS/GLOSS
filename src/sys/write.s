@@ -1,4 +1,4 @@
-    @ write subroutine (syscall)
+    @ Write subroutine (syscall)
     @
     @ Args:
     @ -> *r0: buffer address

@@ -78,7 +78,8 @@ interrupt_jmp_table:
     .word syscall_interrupt
 
 syscall_jmp_table:
-    .word _write_syscall
+    .word _write_syscall  @ 0x0
+    .word _arrsum_syscall @ 0x1
 
 interrupt_jmp_table_addr: .word interrupt_jmp_table
 syscall_jmp_table_addr:   .word syscall_jmp_table
