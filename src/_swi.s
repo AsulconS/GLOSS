@@ -1,11 +1,14 @@
+    @ Software Interrupt Handler
+    @
+    @ Args:
+    @ -> *r0-r3 (syscall args)
+    @ -> *r7 (syscall register)
+    @ Used:
+    @ -> r4, r5
+
 .text
 .global _swi
 _swi:
-    @ Used registers:
-    @ -> r4, r5
-    @ Read Only registers:
-    @ -> r0-r3 (syscall args)
-    @ -> r7 (syscall register)
     @ Store used registers and lr onto the stack
     push {r4, r5, lr}
 
@@ -54,6 +57,8 @@ _swi:
 
     @ 0x7 interrupt
     syscall_interrupt:
+        cmp r7, #0x4
+        bge after
         ldr r5, syscall_jmp_table_addr
         ldr r5, [r5, +r7, LSL #0x2]
         blx r5  @ Passing r0-r3 args
@@ -80,6 +85,8 @@ interrupt_jmp_table:
 syscall_jmp_table:
     .word _write_syscall  @ 0x0
     .word _arrsum_syscall @ 0x1
+    .word _cls_syscall    @ 0x2
+    .word _dpx_syscall    @ 0x3
 
 interrupt_jmp_table_addr: .word interrupt_jmp_table
 syscall_jmp_table_addr:   .word syscall_jmp_table

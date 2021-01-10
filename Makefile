@@ -13,7 +13,7 @@ START_SYMBOL_ARG=-e _entry -u _entry
 TARGET=main
 
 EXCEPTION_OBJS=_startup.o _undef.o _swi.o
-SYSCALL_OBJS=arrsum.o write.o
+SYSCALL_OBJS=arrsum.o write.o cls.o dpx.o
 
 OBJS=_exception.o $(EXCEPTION_OBJS) $(SYSCALL_OBJS) $(TARGET).o
 
@@ -42,6 +42,12 @@ arrsum.o: src/sys/arrsum.s
 
 write.o: src/sys/write.s
 	$(AS) $(OBJ_ARGS) -o write.o src/sys/write.s
+
+cls.o: src/sys/cls.s
+	$(AS) $(OBJ_ARGS) -o cls.o src/sys/cls.s
+
+dpx.o: src/sys/dpx.s
+	$(AS) $(OBJ_ARGS) -o dpx.o src/sys/dpx.s
 
 $(TARGET).o: src/$(TARGET).s
 	$(AS) $(OBJ_ARGS) -o $(TARGET).o src/$(TARGET).s
