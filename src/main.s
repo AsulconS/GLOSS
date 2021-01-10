@@ -13,7 +13,7 @@ main:
         mov r7, #0x2 @ cls    syscall
         svc #0x7     @ invoke syscall
         ror r0, r0, #0x1f
-        b  loop
+        b   loop
 
 end:
     b end
