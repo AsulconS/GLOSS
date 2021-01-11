@@ -10,7 +10,7 @@
 .global _swi
 _swi:
     @ Store used registers and lr onto the stack
-    push {r4, r5, lr}
+    push {r0-r12, lr}
 
     @ r4 will load the interrupt number
     ldr r4, [lr, #-0x4]
@@ -57,11 +57,11 @@ _swi:
 
     @ 0x7 interrupt
     syscall_interrupt:
-        cmp r7, #0x4
+        cmp r7, #0x5
         bge after
         ldr r5, syscall_jmp_table_addr
         ldr r5, [r5, +r7, LSL #0x2]
-        blx r5  @ Passing r0-r3 args
+        blx r5  @ Branch to syscall
         b   after
 
     @ Default interrupt (undefined)
@@ -69,7 +69,7 @@ _swi:
         b after
 
 after:
-    ldm sp!, {r4, r5, pc}^
+    ldm sp!, {r0-r12, pc}^
 
 @ Literal Pool
 interrupt_jmp_table:
@@ -87,6 +87,7 @@ syscall_jmp_table:
     .word _arrsum_syscall @ 0x1
     .word _cls_syscall    @ 0x2
     .word _dpx_syscall    @ 0x3
+    .word _img_syscall    @ 0x4
 
 interrupt_jmp_table_addr: .word interrupt_jmp_table
 syscall_jmp_table_addr:   .word syscall_jmp_table
