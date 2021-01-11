@@ -1,6 +1,5 @@
 .data
-init_color:    .word 0x07e9
-splash_screen: .incbin "emb/img565.bmp"
+init_color: .word 0x0
 .align
 
 .text

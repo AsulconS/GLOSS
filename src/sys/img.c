@@ -9,7 +9,6 @@ void _img_syscall(void* buffer)
 {
     const uint8_t* data_buffer = (const uint8_t*)buffer;
     uint32_t data_offset = RDW(data_buffer + 0xa);
-    __asm__("bkpt");
 
     uint16_t pixel_color;
     uint32_t pixel_offset;

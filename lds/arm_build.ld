@@ -6,9 +6,13 @@ SECTIONS
         * (exception);
         * (.text);
     }
+    .rodata :
+    {
+        * (.rodata);
+    }
     fd_start = .;
 
-    rd_start = 0x0000a000;
+    rd_start = 0x000a0000;
     . = rd_start;
     .data : AT (fd_start)
     {
