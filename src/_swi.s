@@ -3,13 +3,11 @@
     @ Args:
     @ -> *r0-r3 (syscall args)
     @ -> *r7 (syscall register)
-    @ Used:
-    @ -> r4, r5
 
 .text
 .global _swi
 _swi:
-    @ Store used registers and lr onto the stack
+    @ Push 13 registers and lr onto the stack
     push {r0-r12, lr}
 
     @ r4 will load the interrupt number
@@ -20,7 +18,7 @@ _swi:
     cmp r4, #0x8
     bge undef_interrupt
 
-    @ Switch r0 to choose a interrupt address in r1
+    @ Switch r4 to choose a interrupt address in r5
     ldr r5, interrupt_jmp_table_addr
     ldr r5, [r5, +r4, LSL #0x2]
 
@@ -57,11 +55,16 @@ _swi:
 
     @ 0x7 interrupt
     syscall_interrupt:
+        @ Ensure valid syscall number (>=0x0 && <0x5)
         cmp r7, #0x5
         bge after
+
+        @ Switch r7 to choose a syscall address in r5
         ldr r5, syscall_jmp_table_addr
         ldr r5, [r5, +r7, LSL #0x2]
-        blx r5  @ Branch to syscall
+
+        @ Branch to choosen syscall
+        blx r5
         b   after
 
     @ Default interrupt (undefined)
